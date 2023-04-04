@@ -11,7 +11,8 @@ class Piece: CustomStringConvertible, Equatable, Hashable{
   fileprivate var value:Int
   fileprivate var isWhite:Bool
   
-  //var position:Position
+  // positon????
+  var position:Position = Position(row: 1, column: 1)
   
   var description: String{
     return "\(type(of: self))(value='\(value)')"

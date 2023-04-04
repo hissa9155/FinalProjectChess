@@ -10,20 +10,22 @@ import Foundation
 class Board {
   
   // first idea
-  var playBoard:[Position:Piece?] = [Position(row: 1, column: 1):nil]
-  // 
+  var playBoard:[[Piece?]] = [[]]
+  //
   
   var gameState:GameState = .ongoing
   var player:Player = .white
   
-  var whiteCount = 0
-  var blackCount = 0
+  var whiteTurnCount = 0
+  var blackTurnCount = 0
+  var whiteWinCount = 0
+  var blackWinCount = 0
   
   init(gameState: GameState, player: Player, whiteCount: Int = 0, blackCount: Int = 0) {
     self.gameState = gameState
     self.player = player
-    self.whiteCount = whiteCount
-    self.blackCount = blackCount
+    self.whiteTurnCount = whiteCount
+    self.blackTurnCount = blackCount
   }
   
   // show the board like
@@ -56,6 +58,10 @@ class Board {
   }
   
   func switchPlayer(){
+    
+  }
+  
+  func judgeGameState() {
     
   }
 }
