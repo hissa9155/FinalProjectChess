@@ -110,14 +110,17 @@ class Pawn: Piece {
       if position.row == FIRST_ROW_WHITE {
         possibleMoves.append(Position(row: position.row + 1, column: position.column))
         possibleMoves.append(Position(row: position.row + 2, column: position.column))
+      } else {
+        possibleMoves.append(Position(row: position.row + 1, column: position.column))
       }
-      possibleMoves.append(Position(row: position.row + 1, column: position.column))
     } else {
       if position.row == FIRST_ROW_BLACK {
         possibleMoves.append(Position(row: position.row + 1, column: position.column))
         possibleMoves.append(Position(row: position.row + 2, column: position.column))
+      } else {
+        possibleMoves.append(Position(row: position.row + 1, column: position.column))
       }
-      possibleMoves.append(Position(row: position.row + 1, column: position.column))
+      
     }
     
     return possibleMoves

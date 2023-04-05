@@ -24,7 +24,7 @@ struct Position: Equatable, Hashable {
   
   /// get row string like "1", "2"
   func getRowString() -> String {
-    return String(8-self.row)
+    return String(self.row + 1)
   }
   
   /// get row string like "a", "b"
@@ -38,7 +38,7 @@ struct Position: Equatable, Hashable {
   }
   
   func convertRowNumToRowString(rowNum: Int) -> String {
-    return String(8-rowNum)
+    return String(rowNum + 1)
   }
 
   /// if it is necesarry, you need to implement
@@ -48,7 +48,7 @@ struct Position: Equatable, Hashable {
 }
 
 func convertRowStringToRowNum(rowString: String) -> Int {
-  return Int(rowString)!
+  return Int(rowString)! - 1
 }
 
 /// if it is necesarry, you need to implement
