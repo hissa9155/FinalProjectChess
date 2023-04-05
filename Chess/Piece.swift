@@ -8,12 +8,12 @@
 import Foundation
 
 class Piece: CustomStringConvertible, Equatable, Hashable{
-  let SYMBOL_DICT: [Role: (Character, Character)] = [.pawn:   ("♟", "♙"),
-                                                     .knight: ("♞", "♘"),
-                                                     .rook:   ("♜", "♖"),
-                                                     .bishop: ("♝", "♗"),
-                                                     .queen:  ("♛", "♕"),
-                                                     .king:   ("♚", "♔")]
+  let SYMBOL_DICT: [Role: (Character, Character)] = [.pawn:   ("♙", "♟"),
+                                                     .knight: ("♘", "♞"),
+                                                     .rook:   ("♖", "♜"),
+                                                     .bishop: ("♗", "♝"),
+                                                     .queen:  ("♕", "♛"),
+                                                     .king:   ("♔", "♚")]
   fileprivate var value: Int
   fileprivate var isWhite: Bool
   var symbol: Character = "#"

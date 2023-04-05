@@ -39,14 +39,14 @@ class Board {
     var q = Queen(isWhite: false)
     var g = King(isWhite: false)
     
-    self.playBoard = [[R, K, B, G, Q, B, K, R],
-                      [P, P, P, P, P, P, P, P],
-                      [nil, nil, nil, nil, nil, nil, nil, nil],
-                      [nil, nil, nil, nil, nil, nil, nil, nil],
-                      [nil, nil, nil, nil, nil, nil, nil, nil],
-                      [nil, nil, nil, nil, nil, nil, nil, nil],
+    self.playBoard = [[r, k, b, g, q, b, k, r],
                       [p, p, p, p, p, p, p, p],
-                      [r, k, b, g, q, b, k, r]]
+                      [nil, nil, nil, nil, nil, nil, nil, nil],
+                      [nil, nil, nil, nil, nil, nil, nil, nil],
+                      [nil, nil, nil, nil, nil, nil, nil, nil],
+                      [nil, nil, nil, nil, nil, nil, nil, nil],
+                      [P, P, P, P, P, P, P, P],
+                      [R, K, B, G, Q, B, K, R],]
   }
   
   // show the board like
