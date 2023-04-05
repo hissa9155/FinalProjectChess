@@ -24,10 +24,14 @@ class Piece: CustomStringConvertible, Equatable, Hashable{
     return "\(type(of: self))(value='\(value)')"
   }
   
-  init(isWhite: Bool) {
+  init(isWhite: Bool, position:Position? = nil) {
     self.value = 0
     self.isWhite = isWhite
+    if position != nil {
+      self.position = position!
+    }
   }
+  
   
   // Equatable
   static func ==(lhs:Piece, rhs:Piece) -> Bool{
@@ -68,8 +72,8 @@ class Pawn: Piece {
   private var promoted = false
   private var newPiece:Piece?
   
-  init(isWhite: Bool, promoted: Bool = false, newPiece:Piece? = nil) {
-    super.init(isWhite: isWhite)
+  init(isWhite: Bool, position:Position? = nil, promoted: Bool = false, newPiece:Piece? = nil) {
+    super.init(isWhite: isWhite, position: position)
     self.value = 1
     self.role = .pawn
     self.promoted = promoted
@@ -134,8 +138,8 @@ class Pawn: Piece {
 }
 
 class Knight: Piece {
-  override init(isWhite: Bool) {
-    super.init(isWhite: isWhite)
+  override init(isWhite: Bool, position:Position? = nil) {
+    super.init(isWhite: isWhite, position: position)
     self.role = .knight
     self.value = 2
     self.symbol = assignSymbol(self.role)
@@ -149,7 +153,7 @@ class Knight: Piece {
       possibleMoves.append(Position(row: position.row + 2, column: position.column + 1))
     }
     // left upper
-    if position.row + 2 <= Board.MAX_ROW_NUM && position.column - 1 <= Board.MIN_COL_NUM {
+    if position.row + 2 <= Board.MAX_ROW_NUM && position.column - 1 >= Board.MIN_COL_NUM {
       possibleMoves.append(Position(row: position.row + 2, column: position.column - 1))
     }
     // right upper
@@ -157,7 +161,7 @@ class Knight: Piece {
       possibleMoves.append(Position(row: position.row + 1, column: position.column + 2))
     }
     // left uuper
-    if position.row + 1 <= Board.MAX_ROW_NUM && position.column - 2 <= Board.MIN_COL_NUM {
+    if position.row + 1 <= Board.MAX_ROW_NUM && position.column - 2 >= Board.MIN_COL_NUM {
       possibleMoves.append(Position(row: position.row + 1, column: position.column - 2))
     }
     // right lower
@@ -165,7 +169,7 @@ class Knight: Piece {
       possibleMoves.append(Position(row: position.row - 2, column: position.column + 1))
     }
     // left lower
-    if position.row - 2 >= Board.MIN_ROW_NUM && position.column - 1 <= Board.MIN_COL_NUM {
+    if position.row - 2 >= Board.MIN_ROW_NUM && position.column - 1 >= Board.MIN_COL_NUM {
       possibleMoves.append(Position(row: position.row - 2, column: position.column - 1))
     }
     // right lower
@@ -173,7 +177,7 @@ class Knight: Piece {
       possibleMoves.append(Position(row: position.row - 1, column: position.column + 2))
     }
     // left lower
-    if position.row - 1 >= Board.MIN_ROW_NUM && position.column - 2 <= Board.MIN_COL_NUM {
+    if position.row - 1 >= Board.MIN_ROW_NUM && position.column - 2 >= Board.MIN_COL_NUM {
       possibleMoves.append(Position(row: position.row - 1, column: position.column - 2))
     }
     
@@ -187,8 +191,8 @@ class Knight: Piece {
 
 class Bishop: Piece {
   
-  override init(isWhite: Bool) {
-    super.init(isWhite: isWhite)
+  override init(isWhite: Bool, position:Position? = nil) {
+    super.init(isWhite: isWhite, position: position)
     self.role = .bishop
     self.value = 3
     self.symbol = assignSymbol(self.role)
@@ -245,8 +249,8 @@ class Bishop: Piece {
 
 class Rook: Piece {
   
-  override init(isWhite: Bool) {
-    super.init(isWhite: isWhite)
+  override init(isWhite: Bool, position:Position? = nil) {
+    super.init(isWhite: isWhite, position:position)
     self.role = .rook
     self.value = 5
     self.symbol = assignSymbol(self.role)
@@ -283,8 +287,8 @@ class Rook: Piece {
 
 class Queen: Piece {
   
-  override init(isWhite: Bool) {
-    super.init(isWhite: isWhite)
+  override init(isWhite: Bool, position:Position? = nil) {
+    super.init(isWhite: isWhite, position: position)
     self.role = .queen
     self.value = 9
     self.symbol = assignSymbol(self.role)
@@ -380,8 +384,8 @@ class Queen: Piece {
 
 class King: Piece {
   
-  override init(isWhite: Bool) {
-    super.init(isWhite: isWhite)
+  override init(isWhite: Bool, position:Position? = nil) {
+    super.init(isWhite: isWhite, position: position)
     self.role = .king
     self.value = 1000
     self.symbol = assignSymbol(self.role)

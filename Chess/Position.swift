@@ -48,7 +48,7 @@ struct Position: Equatable, Hashable {
 }
 
 func convertRowStringToRowNum(rowString: String) -> Int {
-  return Int(rowString)! - 8
+  return Int(rowString)!
 }
 
 /// if it is necesarry, you need to implement

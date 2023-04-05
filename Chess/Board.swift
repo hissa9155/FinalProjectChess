@@ -31,27 +31,49 @@ class Board {
     self.whiteTurnCount = whiteCount
     self.blackTurnCount = blackCount
     
-    var P = Pawn(isWhite: true)
-    var K = Knight(isWhite: true)
-    var B = Bishop(isWhite: true)
-    var R = Rook(isWhite: true)
-    var Q = Queen(isWhite: true)
-    var G = King(isWhite: true)
-    var p = Pawn(isWhite: false)
-    var k = Knight(isWhite: false)
-    var b = Bishop(isWhite: false)
-    var r = Rook(isWhite: false)
-    var q = Queen(isWhite: false)
-    var g = King(isWhite: false)
+    // white
+    let P0 = Pawn(isWhite: true, position: Position(square: "a2"))
+    let P1 = Pawn(isWhite: true, position: Position(square: "b2"))
+    let P2 = Pawn(isWhite: true, position: Position(square: "c2"))
+    let P3 = Pawn(isWhite: true, position: Position(square: "d2"))
+    let P4 = Pawn(isWhite: true, position: Position(square: "e2"))
+    let P5 = Pawn(isWhite: true, position: Position(square: "f2"))
+    let P6 = Pawn(isWhite: true, position: Position(square: "g2"))
+    let P7 = Pawn(isWhite: true, position: Position(square: "h2"))
+    let K0 = Knight(isWhite: true, position: Position(square: "b1"))
+    let K1 = Knight(isWhite: true, position: Position(square: "g1"))
+    let B0 = Bishop(isWhite: true, position: Position(square: "c1"))
+    let B1 = Bishop(isWhite: true, position: Position(square: "f1"))
+    let R0 = Rook(isWhite: true, position: Position(square: "a1"))
+    let R1 = Rook(isWhite: true, position: Position(square: "h1"))
+    let Q = Queen(isWhite: true, position: Position(square: "e1"))
+    let G = King(isWhite: true, position: Position(square: "d1"))
+    // black
+    let p0 = Pawn(isWhite: false, position: Position(square: "a7"))
+    let p1 = Pawn(isWhite: false, position: Position(square: "b7"))
+    let p2 = Pawn(isWhite: false, position: Position(square: "c7"))
+    let p3 = Pawn(isWhite: false, position: Position(square: "d7"))
+    let p4 = Pawn(isWhite: false, position: Position(square: "e7"))
+    let p5 = Pawn(isWhite: false, position: Position(square: "f7"))
+    let p6 = Pawn(isWhite: false, position: Position(square: "g7"))
+    let p7 = Pawn(isWhite: false, position: Position(square: "a7"))
+    let k0 = Knight(isWhite: false, position: Position(square: "b8"))
+    let k1 = Knight(isWhite: false, position: Position(square: "g8"))
+    let b0 = Bishop(isWhite: false, position: Position(square: "c8"))
+    let b1 = Bishop(isWhite: false, position: Position(square: "f8"))
+    let r0 = Rook(isWhite: false, position: Position(square: "a8"))
+    let r1 = Rook(isWhite: false, position: Position(square: "h8"))
+    let q = Queen(isWhite: false, position: Position(square: "e8"))
+    let g = King(isWhite: false, position: Position(square: "d8"))
     
-    self.playBoard = [[r, k, b, g, q, b, k, r],
-                      [p, p, p, p, p, p, p, p],
+    self.playBoard = [[R0, K0, B0, G, Q, B1, K1, R1],
+                      [P0, P1, P2, P3, P4, P5, P6, P7],
                       [nil, nil, nil, nil, nil, nil, nil, nil],
                       [nil, nil, nil, nil, nil, nil, nil, nil],
                       [nil, nil, nil, nil, nil, nil, nil, nil],
                       [nil, nil, nil, nil, nil, nil, nil, nil],
-                      [P, P, P, P, P, P, P, P],
-                      [R, K, B, G, Q, B, K, R],]
+                      [p0, p1, p2, p3, p4, p5, p6, p7],
+                      [r0, k0, b0, g, q, b1, k1, r1]]
   }
   
   // show the board like
@@ -66,14 +88,14 @@ class Board {
   //a b c d e f g h
   func displayBoard() {
     for (i, row) in self.playBoard.enumerated() {
-      for (j, piece) in row.enumerated() {
+      for (_, piece) in row.enumerated() {
         if piece != nil {
           print(piece!.symbol, terminator: " ")
         } else {
           print(".", terminator: " ")
         }
       }
-      print(" " + String(8 - i))
+      print(" " + String(i + 1))
     }
     print()
     print("a b c d e f g h")
@@ -89,9 +111,9 @@ class Board {
         if piece == nil {
           continue
         }
-        var _piece = piece!
+        let _piece = piece!
         
-        var _possibleMoves = self.findPossibleMoves(tgt: _piece)
+        let _possibleMoves = self.findPossibleMoves(tgt: _piece)
         possibleMovesDic[_piece.position] = _possibleMoves
       }
     }
@@ -106,7 +128,7 @@ class Board {
     switch tgt.role {
     // King, Knight
     case .king, .knight:
-      var _possibleMoves = tgt.getPossibleMoves()
+      let _possibleMoves = tgt.getPossibleMoves()
       for position in _possibleMoves {
         if !friendExistsOnPosition(position: position) {
           possibleMoves.append(position)
@@ -217,26 +239,36 @@ class Board {
     // Pawn
     case .pawn:
       var _possibleMoves = tgt.getPossibleMoves()
-      var row = tgt.position.row
-      var col = tgt.position.column
+      let row = tgt.position.row
+      let col = tgt.position.column
       
       if tgt.isWhite {
-        var _position = Position(row: row + 1, column: col + 1)
-        var __position = Position(row: row + 1, column: col - 1)
-        if foeExistsOnPosition(position: _position){
-          _possibleMoves.append(_position)
+        
+        if row + 1 <= Board.MAX_ROW_NUM && col + 1 <= Board.MAX_COL_NUM {
+          let _position = Position(row: row + 1, column: col + 1)
+          if foeExistsOnPosition(position: _position){
+            _possibleMoves.append(_position)
+          }
         }
-        if foeExistsOnPosition(position: _position){
-          _possibleMoves.append(__position)
+        if row + 1 <= Board.MAX_ROW_NUM && col - 1 >= Board.MIN_COL_NUM {
+          let _position = Position(row: row + 1, column: col - 1)
+          if foeExistsOnPosition(position: _position){
+            _possibleMoves.append(_position)
+          }
         }
       } else {
-        var _position = Position(row: row - 1, column: col + 1)
-        var __position = Position(row: row - 1, column: col - 1)
-        if foeExistsOnPosition(position: _position){
-          _possibleMoves.append(_position)
+        
+        if row - 1 >= Board.MIN_ROW_NUM && col + 1 <= Board.MAX_COL_NUM {
+          let _position = Position(row: row - 1, column: col + 1)
+          if foeExistsOnPosition(position: _position){
+            _possibleMoves.append(_position)
+          }
         }
-        if foeExistsOnPosition(position: _position){
-          _possibleMoves.append(__position)
+        if row - 1 >= Board.MIN_ROW_NUM && col - 1 >= Board.MIN_COL_NUM {
+          let _position = Position(row: row - 1, column: col - 1)
+          if foeExistsOnPosition(position: _position){
+            _possibleMoves.append(_position)
+          }
         }
       }
       possibleMoves = _possibleMoves
@@ -245,48 +277,6 @@ class Board {
     }
     
     return possibleMoves
-  }
-  
-  // Hisa I will move later
-  private func pieceExistsOnPosition(position:Position) -> Bool {
-    var pieceExists = false
-    var _piece = playBoard[position.row][position.column]
-    
-    if _piece != nil {
-      pieceExists = true
-    }
-    
-    return pieceExists
-  }
-  
-  private func friendExistsOnPosition(position:Position) -> Bool {
-    var friendExists = false
-    var _piece = playBoard[position.row][position.column]
-    
-    if !pieceExistsOnPosition(position: position) {
-      return false
-    }
-    var piece = _piece!
-    if piece.isWhite && player == .white || !piece.isWhite && player == .black {
-      friendExists = true
-    }
-    
-    return friendExists
-  }
-  
-  private func foeExistsOnPosition(position:Position) -> Bool {
-    var foeExists = false
-    var _piece = playBoard[position.row][position.column]
-    
-    if !pieceExistsOnPosition(position: position) {
-      return false
-    }
-    var piece = _piece!
-    if piece.isWhite && player != .white || !piece.isWhite && player != .black {
-      foeExists = true
-    }
-    
-    return foeExists
   }
   
   /// move a piece
@@ -300,6 +290,54 @@ class Board {
   
   func judgeGameState() {
     
+  }
+  
+  // ----------------------------------------
+  // Private Method
+  // ----------------------------------------
+  
+  ///  return true if a piece exists on specified position
+  private func pieceExistsOnPosition(position:Position) -> Bool {
+    var pieceExists = false
+    let _piece = playBoard[position.row][position.column]
+    
+    if _piece != nil {
+      pieceExists = true
+    }
+    
+    return pieceExists
+  }
+  
+  ///  return true if a piece on our side  exists on specified position
+  private func friendExistsOnPosition(position:Position) -> Bool {
+    var friendExists = false
+    let _piece = playBoard[position.row][position.column]
+    
+    if !pieceExistsOnPosition(position: position) {
+      return false
+    }
+    let piece = _piece!
+    if piece.isWhite && player == .white || !piece.isWhite && player == .black {
+      friendExists = true
+    }
+    
+    return friendExists
+  }
+  
+  ///  return true if a piece on opponent's side  exists on specified position
+  private func foeExistsOnPosition(position:Position) -> Bool {
+    var foeExists = false
+    let _piece = playBoard[position.row][position.column]
+    
+    if !pieceExistsOnPosition(position: position) {
+      return false
+    }
+    let piece = _piece!
+    if piece.isWhite && player != .white || !piece.isWhite && player != .black {
+      foeExists = true
+    }
+    
+    return foeExists
   }
 }
 
