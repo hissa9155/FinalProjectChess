@@ -7,7 +7,9 @@
 
 import Foundation
 
-let game = Game()
-game.start()
+//let game = Game()
+//game.start()
 
+var board = Board(gameState: .ongoing, player: .white)
 
+board.displayBoard()

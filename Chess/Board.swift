@@ -11,7 +11,6 @@ class Board {
   
   // first idea
   var playBoard:[[Piece?]] = [[]]
-  //
   
   var gameState:GameState = .ongoing
   var player:Player = .white
@@ -40,14 +39,14 @@ class Board {
     var q = Queen(isWhite: false)
     var g = King(isWhite: false)
     
-    self.playBoard = [[r, k, b, g, q, b, k, r],
+    self.playBoard = [[R, K, B, G, Q, B, K, R],
+                      [P, P, P, P, P, P, P, P],
+                      [nil, nil, nil, nil, nil, nil, nil, nil],
+                      [nil, nil, nil, nil, nil, nil, nil, nil],
+                      [nil, nil, nil, nil, nil, nil, nil, nil],
+                      [nil, nil, nil, nil, nil, nil, nil, nil],
                       [p, p, p, p, p, p, p, p],
-                      [nil, nil, nil, nil, nil, nil, nil, nil],
-                      [nil, nil, nil, nil, nil, nil, nil, nil],
-                      [nil, nil, nil, nil, nil, nil, nil, nil],
-                      [nil, nil, nil, nil, nil, nil, nil, nil],
-                      [R, K, B, G, Q, B, K, R],
-                      [P, P, P, P, P, P, P, P]]
+                      [r, k, b, g, q, b, k, r]]
   }
   
   // show the board like
@@ -61,7 +60,18 @@ class Board {
   //♖ . ♗ ♕ ♔ ♗ ♘ ♖  1
   //a b c d e f g h
   func displayBoard() {
-    
+    for (i, row) in self.playBoard.enumerated() {
+      for (j, piece) in row.enumerated() {
+        if piece != nil {
+          print(piece!.symbol, terminator: " ")
+        } else {
+          print(".", terminator: " ")
+        }
+      }
+      print(" " + String(8 - i))
+    }
+    print()
+    print("a b c d e f g h")
   }
   
   /// find possible move
