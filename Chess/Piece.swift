@@ -15,10 +15,9 @@ class Piece: CustomStringConvertible, Equatable, Hashable{
                                                      .queen:  ("♕", "♛"),
                                                      .king:   ("♔", "♚")]
   fileprivate var value: Int
-  fileprivate var isWhite: Bool
+  private(set) var isWhite: Bool
   var symbol: Character = "#"
-  
-  // positon????
+  var role:Role = .noRole
   var position:Position = Position(row: 1, column: 1)
   
   var description: String{
@@ -68,11 +67,11 @@ class Pawn: Piece {
   
   private var promoted = false
   private var newPiece:Piece?
-  var role: Role = .pawn
   
   init(isWhite: Bool, promoted: Bool = false, newPiece:Piece? = nil) {
     super.init(isWhite: isWhite)
     self.value = 1
+    self.role = .pawn
     self.promoted = promoted
     self.newPiece = newPiece
     self.symbol = assignSymbol(self.role)
@@ -135,9 +134,9 @@ class Pawn: Piece {
 }
 
 class Knight: Piece {
-  var role: Role = .knight
   override init(isWhite: Bool) {
     super.init(isWhite: isWhite)
+    self.role = .knight
     self.value = 2
     self.symbol = assignSymbol(self.role)
   }
@@ -187,10 +186,10 @@ class Knight: Piece {
 }
 
 class Bishop: Piece {
-  var role: Role = .bishop
   
   override init(isWhite: Bool) {
     super.init(isWhite: isWhite)
+    self.role = .bishop
     self.value = 3
     self.symbol = assignSymbol(self.role)
   }
@@ -245,10 +244,10 @@ class Bishop: Piece {
 }
 
 class Rook: Piece {
-  var role: Role = .rook
   
   override init(isWhite: Bool) {
     super.init(isWhite: isWhite)
+    self.role = .rook
     self.value = 5
     self.symbol = assignSymbol(self.role)
   }
@@ -283,9 +282,10 @@ class Rook: Piece {
 }
 
 class Queen: Piece {
-  var role: Role = .queen
+  
   override init(isWhite: Bool) {
     super.init(isWhite: isWhite)
+    self.role = .queen
     self.value = 9
     self.symbol = assignSymbol(self.role)
   }
@@ -379,9 +379,10 @@ class Queen: Piece {
 }
 
 class King: Piece {
-  var role: Role = .king
+  
   override init(isWhite: Bool) {
     super.init(isWhite: isWhite)
+    self.role = .king
     self.value = 1000
     self.symbol = assignSymbol(self.role)
   }
@@ -431,7 +432,7 @@ class King: Piece {
 }
 
 enum Role {
-  case pawn, rook, knight, bishop, queen, king
+  case pawn, rook, knight, bishop, queen, king, noRole
     
 //  func initialize(color: PieceColor, position: Position) -> Piece {
 //    switch self {
