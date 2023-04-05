@@ -26,6 +26,28 @@ class Board {
     self.player = player
     self.whiteTurnCount = whiteCount
     self.blackTurnCount = blackCount
+    
+    var P = Pawn(isWhite: true)
+    var K = Knight(isWhite: true)
+    var B = Bishop(isWhite: true)
+    var R = Rook(isWhite: true)
+    var Q = Queen(isWhite: true)
+    var G = King(isWhite: true)
+    var p = Pawn(isWhite: false)
+    var k = Knight(isWhite: false)
+    var b = Bishop(isWhite: false)
+    var r = Rook(isWhite: false)
+    var q = Queen(isWhite: false)
+    var g = King(isWhite: false)
+    
+    self.playBoard = [[r, k, b, g, q, b, k, r],
+                      [p, p, p, p, p, p, p, p],
+                      [nil, nil, nil, nil, nil, nil, nil, nil],
+                      [nil, nil, nil, nil, nil, nil, nil, nil],
+                      [nil, nil, nil, nil, nil, nil, nil, nil],
+                      [nil, nil, nil, nil, nil, nil, nil, nil],
+                      [R, K, B, G, Q, B, K, R],
+                      [P, P, P, P, P, P, P, P]]
   }
   
   // show the board like
