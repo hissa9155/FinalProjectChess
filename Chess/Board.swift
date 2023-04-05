@@ -9,6 +9,11 @@ import Foundation
 
 class Board {
   
+  static let MIN_ROW_NUM = 0
+  static let MIN_COL_NUM = 0
+  static let MAX_ROW_NUM = 7
+  static let MAX_COL_NUM = 7
+  
   // first idea
   var playBoard:[[Piece?]] = [[]]
   
@@ -75,13 +80,34 @@ class Board {
   }
   
   /// find possible move
-  func findPossibleMove() -> [Position:[Position]] {
+  func findPossibleMoves() -> [Position:[Position]] {
+    
+//    for (rowNum, row) in playBoard.enumerated() {
+//      for (colNum, piece) in row.enumerated() {
+//        if piece == nil {
+//          continue
+//        }
+//
+//        switch piece.role {
+//        case .king:
+//
+//        case .queen:
+//        case .bishop:
+//        case .knight:
+//        case .rook:
+//        case .pawn:
+//        default
+//          break
+//        }
+//      }
+//    }
+    
     return [Position(row: 1, column: 1):[]]
   }
   
   /// find possible moves for one piece
-  func findPossibleMove(tgt:Piece) {
-    
+  func findPossibleMoves(tgt:Piece) -> [Position:[Position]] {
+    return [Position(row: 1, column: 1):[]]
   }
   
   /// move a piece

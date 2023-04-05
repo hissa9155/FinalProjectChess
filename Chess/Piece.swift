@@ -58,6 +58,10 @@ class Piece: CustomStringConvertible, Equatable, Hashable{
   func assignSymbol(_ role: Role) -> Character {
     return isWhite ? SYMBOL_DICT[role]!.0 : SYMBOL_DICT[role]!.1
   }
+  
+  func getPossibleMoves() -> [Position] {
+    fatalError("you need to implement this mothod in sub class.")
+  }
 }
 
 class Pawn: Piece {
@@ -94,6 +98,28 @@ class Pawn: Piece {
     return result
   }
   
+  override func getPossibleMoves() -> [Position] {
+    var possibleMoves:[Position] = []
+    let FIRST_ROW_WHITE = 1
+    let FIRST_ROW_BLACK = 6
+    
+    if isWhite {
+      if position.row == FIRST_ROW_WHITE {
+        possibleMoves.append(Position(row: position.row + 1, column: position.column))
+        possibleMoves.append(Position(row: position.row + 2, column: position.column))
+      }
+      possibleMoves.append(Position(row: position.row + 1, column: position.column))
+    } else {
+      if position.row == FIRST_ROW_BLACK {
+        possibleMoves.append(Position(row: position.row + 1, column: position.column))
+        possibleMoves.append(Position(row: position.row + 2, column: position.column))
+      }
+      possibleMoves.append(Position(row: position.row + 1, column: position.column))
+    }
+    
+    return possibleMoves
+  }
+  
   override func move() {
     print("Forward 1")
   }
@@ -116,6 +142,45 @@ class Knight: Piece {
     self.symbol = assignSymbol(self.role)
   }
   
+  override func getPossibleMoves() -> [Position] {
+    var possibleMoves:[Position] = []
+    
+    // right uppper
+    if position.row + 2 <= Board.MAX_ROW_NUM && position.column + 1 <= Board.MAX_COL_NUM {
+      possibleMoves.append(Position(row: position.row + 2, column: position.column + 1))
+    }
+    // left upper
+    if position.row + 2 <= Board.MAX_ROW_NUM && position.column - 1 <= Board.MIN_COL_NUM {
+      possibleMoves.append(Position(row: position.row + 2, column: position.column - 1))
+    }
+    // right upper
+    if position.row + 1 <= Board.MAX_ROW_NUM && position.column + 2 <= Board.MAX_COL_NUM {
+      possibleMoves.append(Position(row: position.row + 1, column: position.column + 2))
+    }
+    // left uuper
+    if position.row + 1 <= Board.MAX_ROW_NUM && position.column - 2 <= Board.MIN_COL_NUM {
+      possibleMoves.append(Position(row: position.row + 1, column: position.column - 2))
+    }
+    // right lower
+    if position.row - 2 >= Board.MIN_ROW_NUM && position.column + 1 <= Board.MAX_COL_NUM {
+      possibleMoves.append(Position(row: position.row - 2, column: position.column + 1))
+    }
+    // left lower
+    if position.row - 2 >= Board.MIN_ROW_NUM && position.column - 1 <= Board.MIN_COL_NUM {
+      possibleMoves.append(Position(row: position.row - 2, column: position.column - 1))
+    }
+    // right lower
+    if position.row - 1 >= Board.MIN_ROW_NUM && position.column + 2 <= Board.MAX_COL_NUM {
+      possibleMoves.append(Position(row: position.row - 1, column: position.column + 2))
+    }
+    // left lower
+    if position.row - 1 >= Board.MIN_ROW_NUM && position.column - 2 <= Board.MIN_COL_NUM {
+      possibleMoves.append(Position(row: position.row - 1, column: position.column - 2))
+    }
+    
+    return possibleMoves
+  }
+  
   override func move() {
     print("Like an L")
   }
@@ -128,6 +193,50 @@ class Bishop: Piece {
     super.init(isWhite: isWhite)
     self.value = 3
     self.symbol = assignSymbol(self.role)
+  }
+  
+  override func getPossibleMoves() -> [Position] {
+    var possibleMoves:[Position] = []
+    let row = position.row
+    let col = position.column
+    
+    // diagonally line
+    var rowNum = row + 1
+    var rightColNum = col
+    var leftColNum = col
+    var colDif = 0
+    while rowNum <= Board.MAX_ROW_NUM {
+      colDif += 1
+      rightColNum += colDif
+      leftColNum -= colDif
+      
+      if rightColNum <= Board.MAX_COL_NUM {
+        possibleMoves.append(Position(row: rowNum, column: rightColNum))
+      }
+      if leftColNum >= Board.MIN_COL_NUM {
+        possibleMoves.append(Position(row: rowNum, column: leftColNum))
+      }
+      rowNum += 1
+    }
+    rowNum = row - 1
+    rightColNum = col
+    leftColNum = col
+    colDif = 0
+    while rowNum >= Board.MIN_ROW_NUM {
+      colDif += 1
+      rightColNum += colDif
+      leftColNum -= colDif
+      
+      if rightColNum <= Board.MAX_COL_NUM {
+        possibleMoves.append(Position(row: rowNum, column: rightColNum))
+      }
+      if leftColNum >= Board.MIN_COL_NUM {
+        possibleMoves.append(Position(row: rowNum, column: leftColNum))
+      }
+      rowNum -= 1
+    }
+    
+    return possibleMoves
   }
   
   override func move() {
@@ -144,6 +253,30 @@ class Rook: Piece {
     self.symbol = assignSymbol(self.role)
   }
   
+  override func getPossibleMoves() -> [Position] {
+    var possibleMoves:[Position] = []
+    let row = position.row
+    let col = position.column
+    
+    // verticle line
+    for rowNum in Board.MIN_ROW_NUM...Board.MAX_ROW_NUM {
+      if rowNum == row {
+        continue
+      }
+      possibleMoves.append(Position(row: rowNum, column: col))
+    }
+    
+    // horizontal line
+    for colNum in Board.MIN_COL_NUM...Board.MAX_COL_NUM {
+      if colNum == col {
+        continue
+      }
+      possibleMoves.append(Position(row: row, column: colNum))
+    }
+    
+    return possibleMoves
+  }
+  
   override func move() {
     print("Horizontally or vertically")
   }
@@ -157,6 +290,89 @@ class Queen: Piece {
     self.symbol = assignSymbol(self.role)
   }
   
+  override func getPossibleMoves() -> [Position] {
+    var possibleMoves:[Position] = []
+    let row = position.row
+    let col = position.column
+    
+    // verticle line
+    for rowNum in Board.MIN_ROW_NUM...Board.MAX_ROW_NUM {
+      if rowNum == row {
+        continue
+      }
+      possibleMoves.append(Position(row: rowNum, column: col))
+    }
+//    for rowNum in row...Board.MAX_ROW_NUM {
+//      if rowNum == row {
+//        continue
+//      }
+//      possibleMoves.append(Position(row: rowNum, column: position.column))
+//    }
+//    for rowNum in Board.MIN_ROW_NUM...row {
+//      if rowNum == row {
+//        continue
+//      }
+//      possibleMoves.append(Position(row: rowNum, column: col))
+//    }
+    
+    // horizontal line
+    for colNum in Board.MIN_COL_NUM...Board.MAX_COL_NUM {
+      if colNum == col {
+        continue
+      }
+      possibleMoves.append(Position(row: row, column: colNum))
+    }
+//    for colNum in col...Board.MAX_COL_NUM {
+//      if colNum == col {
+//        continue
+//      }
+//      possibleMoves.append(Position(row: row, column: colNum))
+//    }
+//    for colNum in Board.MIN_COL_NUM...col {
+//      if colNum == col {
+//        continue
+//      }
+//      possibleMoves.append(Position(row: row, column: colNum))
+//    }
+    // diagonally line
+    var rowNum = row + 1
+    var rightColNum = col
+    var leftColNum = col
+    var colDif = 0
+    while rowNum <= Board.MAX_ROW_NUM {
+      colDif += 1
+      rightColNum += colDif
+      leftColNum -= colDif
+      
+      if rightColNum <= Board.MAX_COL_NUM {
+        possibleMoves.append(Position(row: rowNum, column: rightColNum))
+      }
+      if leftColNum >= Board.MIN_COL_NUM {
+        possibleMoves.append(Position(row: rowNum, column: leftColNum))
+      }
+      rowNum += 1
+    }
+    rowNum = row - 1
+    rightColNum = col
+    leftColNum = col
+    colDif = 0
+    while rowNum >= Board.MIN_ROW_NUM {
+      colDif += 1
+      rightColNum += colDif
+      leftColNum -= colDif
+      
+      if rightColNum <= Board.MAX_COL_NUM {
+        possibleMoves.append(Position(row: rowNum, column: rightColNum))
+      }
+      if leftColNum >= Board.MIN_COL_NUM {
+        possibleMoves.append(Position(row: rowNum, column: leftColNum))
+      }
+      rowNum -= 1
+    }
+    
+    return possibleMoves
+  }
+  
   override func move() {
     print("Like bishop and rook")
   }
@@ -168,6 +384,45 @@ class King: Piece {
     super.init(isWhite: isWhite)
     self.value = 1000
     self.symbol = assignSymbol(self.role)
+  }
+  
+  override func getPossibleMoves() -> [Position] {
+    var possibleMoves:[Position] = []
+    
+    // forward(from white side)
+    if position.row + 1 <= Board.MAX_ROW_NUM {
+      possibleMoves.append(Position(row: position.row + 1, column: position.column))
+    }
+    // backward(from white side)
+    if position.row - 1 >= Board.MIN_ROW_NUM {
+      possibleMoves.append(Position(row: position.row - 1, column: position.column))
+    }
+    // rigth
+    if position.column + 1 <= Board.MAX_COL_NUM {
+      possibleMoves.append(Position(row: position.row, column: position.column + 1))
+    }
+    // left
+    if position.column - 1 >= Board.MIN_COL_NUM {
+      possibleMoves.append(Position(row: position.row, column: position.column - 1))
+    }
+    // upper right(from white side)
+    if position.row + 1 <= Board.MAX_ROW_NUM && position.column + 1 <= Board.MAX_COL_NUM {
+      possibleMoves.append(Position(row: position.row + 1, column: position.column + 1))
+    }
+    // upper left(from white side)
+    if position.row + 1 <= Board.MAX_ROW_NUM && position.column - 1 >= Board.MIN_COL_NUM {
+      possibleMoves.append(Position(row: position.row + 1, column: position.column - 1))
+    }
+    // lower right(from white side)
+    if position.row - 1 >= Board.MIN_ROW_NUM && position.column + 1 <= Board.MAX_COL_NUM {
+      possibleMoves.append(Position(row: position.row - 1, column: position.column + 1))
+    }
+    // lower left(from white side)
+    if position.row - 1 >= Board.MIN_ROW_NUM && position.column - 1 >= Board.MIN_COL_NUM {
+      possibleMoves.append(Position(row: position.row - 1, column: position.column - 1))
+    }
+    
+    return possibleMoves
   }
   
   override func move() {
