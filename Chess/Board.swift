@@ -315,6 +315,7 @@ class Board {
     let (from_row, from_col) = (from.row, from.column)
     let (to_row, to_col) = (to.row, to.column)
     self.playBoard[to_row][to_col] = self.playBoard[from_row][from_col]
+    self.playBoard[to_row][to_col]?.position = to
     self.playBoard[from_row][from_col] = nil
   }
   
