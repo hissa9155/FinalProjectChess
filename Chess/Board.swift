@@ -311,16 +311,32 @@ class Board {
   }
   
   /// move a piece
-  func move(piece:Piece, to:Position){
-    
+  func move(from:Position, to:Position) {
+    let (from_row, from_col) = (from.row, from.column)
+    let (to_row, to_col) = (to.row, to.column)
+    self.playBoard[to_row][to_col] = self.playBoard[from_row][from_col]
+    self.playBoard[from_row][from_col] = nil
   }
   
-  func switchPlayer(){
-    
+  func switchPlayer() {
+    self.player = self.player == .white ? .black : .white
   }
   
-  func judgeGameState() {
+  func judgeGameState() -> GameState {
     
+    var foeKing: Piece? = nil
+    for currentRow in self.playBoard {
+      for currentPiece in currentRow {
+        guard type(of: currentPiece) == King.Type.self else { continue }
+        guard currentPiece?.isWhite == true && self.player == .white else { continue }
+        foeKing = currentPiece!
+      }
+    }
+    if foeKing != nil {
+      let foeKingPossibleMoves = findPossibleMoves(tgt: foeKing!)
+    }
+    
+    return .ongoing
   }
   
   // ----------------------------------------
