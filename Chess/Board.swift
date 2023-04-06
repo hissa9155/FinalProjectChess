@@ -98,8 +98,7 @@ class Board {
       }
       print(" " + String(i + 1))
     }
-    print()
-    print("a b c d e f g h")
+    print("\na b c d e f g h\n\n")
   }
   
   /// find possible move
