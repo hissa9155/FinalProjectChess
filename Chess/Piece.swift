@@ -21,7 +21,7 @@ class Piece: CustomStringConvertible, Equatable, Hashable{
   var position:Position = Position(row: 1, column: 1)
   
   var description: String{
-    return "\(type(of: self))(value='\(value)')"
+    return "\(type(of: self))(symbol='\(symbol)', isWhite='\(isWhite))"
   }
   
   init(isWhite: Bool, position:Position? = nil) {
