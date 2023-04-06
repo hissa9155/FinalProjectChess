@@ -115,10 +115,10 @@ class Pawn: Piece {
       }
     } else {
       if position.row == FIRST_ROW_BLACK {
-        possibleMoves.append(Position(row: position.row + 1, column: position.column))
-        possibleMoves.append(Position(row: position.row + 2, column: position.column))
+        possibleMoves.append(Position(row: position.row - 1, column: position.column))
+        possibleMoves.append(Position(row: position.row - 2, column: position.column))
       } else {
-        possibleMoves.append(Position(row: position.row + 1, column: position.column))
+        possibleMoves.append(Position(row: position.row - 1, column: position.column))
       }
       
     }
@@ -303,44 +303,32 @@ class Queen: Piece {
     let col = position.column
     
     // verticle line
-    for rowNum in Board.MIN_ROW_NUM...Board.MAX_ROW_NUM {
+    for rowNum in row...Board.MAX_ROW_NUM {
+      if rowNum == row {
+        continue
+      }
+      possibleMoves.append(Position(row: rowNum, column: position.column))
+    }
+    for rowNum in Board.MIN_ROW_NUM...row {
       if rowNum == row {
         continue
       }
       possibleMoves.append(Position(row: rowNum, column: col))
     }
-//    for rowNum in row...Board.MAX_ROW_NUM {
-//      if rowNum == row {
-//        continue
-//      }
-//      possibleMoves.append(Position(row: rowNum, column: position.column))
-//    }
-//    for rowNum in Board.MIN_ROW_NUM...row {
-//      if rowNum == row {
-//        continue
-//      }
-//      possibleMoves.append(Position(row: rowNum, column: col))
-//    }
     
     // horizontal line
-    for colNum in Board.MIN_COL_NUM...Board.MAX_COL_NUM {
+    for colNum in col...Board.MAX_COL_NUM {
       if colNum == col {
         continue
       }
       possibleMoves.append(Position(row: row, column: colNum))
     }
-//    for colNum in col...Board.MAX_COL_NUM {
-//      if colNum == col {
-//        continue
-//      }
-//      possibleMoves.append(Position(row: row, column: colNum))
-//    }
-//    for colNum in Board.MIN_COL_NUM...col {
-//      if colNum == col {
-//        continue
-//      }
-//      possibleMoves.append(Position(row: row, column: colNum))
-//    }
+    for colNum in Board.MIN_COL_NUM...col {
+      if colNum == col {
+        continue
+      }
+      possibleMoves.append(Position(row: row, column: colNum))
+    }
     // diagonally line
     var rowNum = row + 1
     var rightColNum = col

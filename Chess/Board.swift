@@ -63,17 +63,18 @@ class Board {
     let b1 = Bishop(isWhite: false, position: Position(square: "f8"))
     let r0 = Rook(isWhite: false, position: Position(square: "a8"))
     let r1 = Rook(isWhite: false, position: Position(square: "h8"))
-    let q = Queen(isWhite: false, position: Position(square: "e8"))
+    //let q = Queen(isWhite: false, position: Position(square: "e8"))
     let g = King(isWhite: false, position: Position(square: "d8"))
     
+    let q = Queen(isWhite: false, position: Position(square: "e5"))
     self.playBoard = [[R0, K0, B0, G, Q, B1, K1, R1],
                       [P0, P1, P2, P3, P4, P5, P6, P7],
                       [nil, nil, nil, nil, nil, nil, nil, nil],
                       [nil, nil, nil, nil, nil, nil, nil, nil],
-                      [nil, nil, nil, nil, nil, nil, nil, nil],
+                      [nil, nil, nil, nil, q, nil, nil, nil],
                       [nil, nil, nil, nil, nil, nil, nil, nil],
                       [p0, p1, p2, p3, p4, p5, p6, p7],
-                      [r0, k0, b0, g, q, b1, k1, r1]]
+                      [r0, k0, b0, g, nil, b1, k1, r1]]
   }
   
   // show the board like
@@ -130,7 +131,7 @@ class Board {
     case .king, .knight:
       let _possibleMoves = tgt.getPossibleMoves()
       for position in _possibleMoves {
-        if !friendExistsOnPosition(position: position) {
+        if !friendExistsOnPosition(position: position, isWhite: tgt.isWhite) {
           possibleMoves.append(position)
         }
       }
@@ -141,62 +142,87 @@ class Board {
       
       if tgt.role == .queen || tgt.role == .rook {
         // verticle line
-        for rowNum in Board.MIN_ROW_NUM...Board.MAX_ROW_NUM {
+        for rowNum in row...Board.MAX_ROW_NUM {
           if rowNum == row {
             continue
           }
-          if friendExistsOnPosition(position: tgt.position){
+          if friendExistsOnPosition(position: Position(row: rowNum, column: col), isWhite: tgt.isWhite){
             break
           } else {
             possibleMoves.append(Position(row: rowNum, column: col))
-            if pieceExistsOnPosition(position: tgt.position) {
+            if pieceExistsOnPosition(position: Position(row: rowNum, column: col)) {
+              break
+            }
+          }
+        }
+        for rowNum in (Board.MIN_ROW_NUM...row).reversed() {
+          if rowNum == row {
+            continue
+          }
+          if friendExistsOnPosition(position: Position(row: rowNum, column: col), isWhite: tgt.isWhite){
+            break
+          } else {
+            possibleMoves.append(Position(row: rowNum, column: col))
+            if pieceExistsOnPosition(position: Position(row: rowNum, column: col)) {
               break
             }
           }
         }
         // horizontal line
-        for colNum in Board.MIN_COL_NUM...Board.MAX_COL_NUM {
+        for colNum in col...Board.MAX_COL_NUM {
           if colNum == col {
             continue
           }
-          if friendExistsOnPosition(position: tgt.position){
-            break
+          if friendExistsOnPosition(position: Position(row: row, column: colNum), isWhite: tgt.isWhite){
+            continue
           } else {
             possibleMoves.append(Position(row: row, column: colNum))
             if pieceExistsOnPosition(position: tgt.position) {
-              break
+              continue
+            }
+          }
+        }
+        for colNum in (Board.MIN_COL_NUM...col).reversed() {
+          if colNum == col {
+            continue
+          }
+          if friendExistsOnPosition(position: Position(row: row, column: colNum), isWhite: tgt.isWhite){
+            continue
+          } else {
+            possibleMoves.append(Position(row: row, column: colNum))
+            if pieceExistsOnPosition(position: tgt.position) {
+              continue
             }
           }
         }
       }
+      
       
       if tgt.role == .queen || tgt.role == .bishop {
         // diagonally line
         var rowNum = row + 1
         var rightColNum = col
         var leftColNum = col
-        var colDif = 0
         while rowNum <= Board.MAX_ROW_NUM {
-          colDif += 1
-          rightColNum += colDif
-          leftColNum -= colDif
+          rightColNum += 1
+          leftColNum -= 1
           
           if rightColNum <= Board.MAX_COL_NUM {
-            if friendExistsOnPosition(position: tgt.position){
+            if friendExistsOnPosition(position: Position(row: rowNum, column: col), isWhite:tgt.isWhite){
               break
             } else {
               possibleMoves.append(Position(row: rowNum, column: rightColNum))
-              if pieceExistsOnPosition(position: tgt.position) {
+              if pieceExistsOnPosition(position: Position(row: rowNum, column: col)) {
                 break
               }
             }
           }
           if leftColNum >= Board.MIN_COL_NUM {
-            if friendExistsOnPosition(position: tgt.position){
+            if friendExistsOnPosition(position: Position(row: rowNum, column: col), isWhite: tgt.isWhite){
               break
             } else {
               possibleMoves.append(Position(row: rowNum, column: leftColNum))
-              if pieceExistsOnPosition(position: tgt.position) {
+              if pieceExistsOnPosition(position: Position(row: rowNum, column: col)) {
                 break
               }
             }
@@ -206,28 +232,26 @@ class Board {
         rowNum = row - 1
         rightColNum = col
         leftColNum = col
-        colDif = 0
         while rowNum >= Board.MIN_ROW_NUM {
-          colDif += 1
-          rightColNum += colDif
-          leftColNum -= colDif
+          rightColNum += 1
+          leftColNum -= 1
           
           if rightColNum <= Board.MAX_COL_NUM {
-            if friendExistsOnPosition(position: tgt.position){
+            if friendExistsOnPosition(position: Position(row: rowNum, column: col), isWhite: tgt.isWhite){
               break
             } else {
               possibleMoves.append(Position(row: rowNum, column: rightColNum))
-              if pieceExistsOnPosition(position: tgt.position) {
+              if pieceExistsOnPosition(position: Position(row: rowNum, column: col)) {
                 break
               }
             }
           }
           if leftColNum >= Board.MIN_COL_NUM {
-            if friendExistsOnPosition(position: tgt.position){
+            if friendExistsOnPosition(position: Position(row: rowNum, column: col), isWhite: tgt.isWhite){
               break
             } else {
               possibleMoves.append(Position(row: rowNum, column: leftColNum))
-              if pieceExistsOnPosition(position: tgt.position) {
+              if pieceExistsOnPosition(position: Position(row: rowNum, column: col)) {
                 break
               }
             }
@@ -246,13 +270,13 @@ class Board {
         
         if row + 1 <= Board.MAX_ROW_NUM && col + 1 <= Board.MAX_COL_NUM {
           let _position = Position(row: row + 1, column: col + 1)
-          if foeExistsOnPosition(position: _position){
+          if foeExistsOnPosition(position: _position, isWhite:tgt.isWhite){
             _possibleMoves.append(_position)
           }
         }
         if row + 1 <= Board.MAX_ROW_NUM && col - 1 >= Board.MIN_COL_NUM {
           let _position = Position(row: row + 1, column: col - 1)
-          if foeExistsOnPosition(position: _position){
+          if foeExistsOnPosition(position: _position, isWhite:tgt.isWhite){
             _possibleMoves.append(_position)
           }
         }
@@ -260,13 +284,13 @@ class Board {
         
         if row - 1 >= Board.MIN_ROW_NUM && col + 1 <= Board.MAX_COL_NUM {
           let _position = Position(row: row - 1, column: col + 1)
-          if foeExistsOnPosition(position: _position){
+          if foeExistsOnPosition(position: _position, isWhite:tgt.isWhite){
             _possibleMoves.append(_position)
           }
         }
         if row - 1 >= Board.MIN_ROW_NUM && col - 1 >= Board.MIN_COL_NUM {
           let _position = Position(row: row - 1, column: col - 1)
-          if foeExistsOnPosition(position: _position){
+          if foeExistsOnPosition(position: _position, isWhite:tgt.isWhite){
             _possibleMoves.append(_position)
           }
         }
@@ -309,7 +333,14 @@ class Board {
   }
   
   ///  return true if a piece on our side  exists on specified position
-  private func friendExistsOnPosition(position:Position) -> Bool {
+  private func friendExistsOnPosition(position:Position, isWhite:Bool? = nil ) -> Bool {
+    var _isWhite = false
+    if isWhite == nil {
+      _isWhite = player == .white
+    } else {
+      _isWhite = isWhite!
+    }
+    
     var friendExists = false
     let _piece = playBoard[position.row][position.column]
     
@@ -317,7 +348,7 @@ class Board {
       return false
     }
     let piece = _piece!
-    if piece.isWhite && player == .white || !piece.isWhite && player == .black {
+    if piece.isWhite && _isWhite || !piece.isWhite && !_isWhite {
       friendExists = true
     }
     
@@ -325,7 +356,14 @@ class Board {
   }
   
   ///  return true if a piece on opponent's side  exists on specified position
-  private func foeExistsOnPosition(position:Position) -> Bool {
+  private func foeExistsOnPosition(position:Position, isWhite:Bool? = nil) -> Bool {
+    var _isWhite = false
+    if isWhite == nil {
+      _isWhite = player == .white
+    } else {
+      _isWhite = isWhite!
+    }
+    
     var foeExists = false
     let _piece = playBoard[position.row][position.column]
     
@@ -333,7 +371,7 @@ class Board {
       return false
     }
     let piece = _piece!
-    if piece.isWhite && player != .white || !piece.isWhite && player != .black {
+    if piece.isWhite && _isWhite || !piece.isWhite && !_isWhite {
       foeExists = true
     }
     
