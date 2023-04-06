@@ -121,6 +121,26 @@ class Board {
     return possibleMovesDic
   }
   
+  /// find all possible moves except foeKing
+  func findPossiblePlayerMoves() -> [Position:[Position]] {
+    
+    var possibleMovesDic:[Position:[Position]] = Dictionary()
+    
+    for (_, row) in playBoard.enumerated() {
+      for (_, piece) in row.enumerated() {
+        let currentIsWhite = self.player == .white ? true : false
+        if piece == nil || piece?.isWhite != currentIsWhite {
+          continue
+        }
+        let _piece = piece!
+        
+        let _possibleMoves = self.findPossibleMoves(tgt: _piece)
+        possibleMovesDic[_piece.position] = _possibleMoves
+      }
+    }
+    return possibleMovesDic
+  }
+  
   /// find possible moves for one piece
   func findPossibleMoves(tgt:Piece) -> [Position] {
     var possibleMoves:[Position] = []
@@ -310,6 +330,14 @@ class Board {
     }
   }
   
+  func printPossiblePlayerMoves() {
+    for (k, v) in board.findPossiblePlayerMoves() {
+      print(k.getSquareString(), board.playBoard[k.row][k.column]?.symbol ?? "@", terminator: ": ")
+      v.map({ print(ColString.convertColNumToColString(colNum: $0.column)! + $0.convertRowNumToRowString(rowNum: $0.row), terminator: " ") })
+      print()
+    }
+  }
+  
   /// move a piece
   func move(from:Position, to:Position) {
     let (from_row, from_col) = (from.row, from.column)
@@ -324,17 +352,41 @@ class Board {
   }
   
   func judgeGameState() -> GameState {
-    
     var foeKing: Piece? = nil
+    var foeKingPossibleMoves: [Position] = []
+    var PossiblePlayerMoves = findPossiblePlayerMoves()
+    
+    // get foeKing
     for currentRow in self.playBoard {
-      for currentPiece in currentRow {
-        guard type(of: currentPiece) == King.Type.self else { continue }
-        guard currentPiece?.isWhite == true && self.player == .white else { continue }
-        foeKing = currentPiece!
+      for currentCell in currentRow {
+        if let currentPiece = currentCell {
+          guard currentPiece.role == .king else { continue }
+          if self.player == .black {
+            guard currentPiece.isWhite == true else { continue }
+          } else {
+            guard currentPiece.isWhite == false else { continue }
+          }
+          foeKing = currentPiece
+        } else {
+          continue
+        }
       }
     }
+    
+    // get foeKingPossibleMoves
     if foeKing != nil {
-      let foeKingPossibleMoves = findPossibleMoves(tgt: foeKing!)
+      foeKingPossibleMoves = findPossibleMoves(tgt: foeKing!)
+      print(foeKingPossibleMoves)
+    }
+    
+    // compare foeKingPossibleMoves and PossiblePlayerMoves - return .check if there is intersection
+    print("foeKingPossibleMoves", foeKingPossibleMoves)
+    for (_, v) in PossiblePlayerMoves {
+      for possiblePlayerMove in v {
+        if foeKingPossibleMoves.contains(possiblePlayerMove) {
+          return .check
+        }
+      }
     }
     
     return .ongoing
