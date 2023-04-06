@@ -193,11 +193,11 @@ class Board {
             continue
           }
           if friendExistsOnPosition(position: Position(row: row, column: colNum), isWhite: tgt.isWhite){
-            continue
+            break
           } else {
             possibleMoves.append(Position(row: row, column: colNum))
-            if pieceExistsOnPosition(position: tgt.position) {
-              continue
+            if pieceExistsOnPosition(position:Position(row: row, column: colNum)) {
+              break
             }
           }
         }
@@ -206,11 +206,11 @@ class Board {
             continue
           }
           if friendExistsOnPosition(position: Position(row: row, column: colNum), isWhite: tgt.isWhite){
-            continue
+            break
           } else {
             possibleMoves.append(Position(row: row, column: colNum))
-            if pieceExistsOnPosition(position: tgt.position) {
-              continue
+            if pieceExistsOnPosition(position: Position(row: row, column: colNum)) {
+              break
             }
           }
         }
@@ -222,27 +222,29 @@ class Board {
         var rowNum = row + 1
         var rightColNum = col
         var leftColNum = col
+        var isRightColEnd = false
+        var isLestColEnd = false
         while rowNum <= Board.MAX_ROW_NUM {
           rightColNum += 1
           leftColNum -= 1
           
-          if rightColNum <= Board.MAX_COL_NUM {
-            if friendExistsOnPosition(position: Position(row: rowNum, column: col), isWhite:tgt.isWhite){
-              break
+          if rightColNum <= Board.MAX_COL_NUM && !isRightColEnd {
+            if friendExistsOnPosition(position: Position(row: rowNum, column: rightColNum), isWhite:tgt.isWhite){
+              isRightColEnd = true
             } else {
               possibleMoves.append(Position(row: rowNum, column: rightColNum))
-              if pieceExistsOnPosition(position: Position(row: rowNum, column: col)) {
-                break
+              if pieceExistsOnPosition(position: Position(row: rowNum, column: rightColNum)) {
+                isRightColEnd = true
               }
             }
           }
-          if leftColNum >= Board.MIN_COL_NUM {
-            if friendExistsOnPosition(position: Position(row: rowNum, column: col), isWhite: tgt.isWhite){
-              break
+          if leftColNum >= Board.MIN_COL_NUM && !isLestColEnd {
+            if friendExistsOnPosition(position: Position(row: rowNum, column: leftColNum), isWhite: tgt.isWhite){
+              isLestColEnd = true
             } else {
               possibleMoves.append(Position(row: rowNum, column: leftColNum))
-              if pieceExistsOnPosition(position: Position(row: rowNum, column: col)) {
-                break
+              if pieceExistsOnPosition(position: Position(row: rowNum, column: leftColNum)) {
+                isLestColEnd = true
               }
             }
           }
@@ -251,27 +253,29 @@ class Board {
         rowNum = row - 1
         rightColNum = col
         leftColNum = col
+        isRightColEnd = false
+        isLestColEnd = false
         while rowNum >= Board.MIN_ROW_NUM {
           rightColNum += 1
           leftColNum -= 1
           
-          if rightColNum <= Board.MAX_COL_NUM {
-            if friendExistsOnPosition(position: Position(row: rowNum, column: col), isWhite: tgt.isWhite){
-              break
+          if rightColNum <= Board.MAX_COL_NUM && !isRightColEnd {
+            if friendExistsOnPosition(position: Position(row: rowNum, column: rightColNum), isWhite: tgt.isWhite){
+              isRightColEnd = true
             } else {
               possibleMoves.append(Position(row: rowNum, column: rightColNum))
-              if pieceExistsOnPosition(position: Position(row: rowNum, column: col)) {
-                break
+              if pieceExistsOnPosition(position: Position(row: rowNum, column: rightColNum)) {
+                isRightColEnd = true
               }
             }
           }
-          if leftColNum >= Board.MIN_COL_NUM {
-            if friendExistsOnPosition(position: Position(row: rowNum, column: col), isWhite: tgt.isWhite){
-              break
+          if leftColNum >= Board.MIN_COL_NUM && !isLestColEnd {
+            if friendExistsOnPosition(position: Position(row: rowNum, column: leftColNum), isWhite: tgt.isWhite){
+              isLestColEnd = true
             } else {
               possibleMoves.append(Position(row: rowNum, column: leftColNum))
-              if pieceExistsOnPosition(position: Position(row: rowNum, column: col)) {
-                break
+              if pieceExistsOnPosition(position: Position(row: rowNum, column: leftColNum)) {
+                isLestColEnd = true
               }
             }
           }

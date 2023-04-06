@@ -29,12 +29,20 @@ board.move(from: Position(square: "c2"), to: Position(square: "c4"))
 //board.move(from: Position(square: "e8"), to: Position(square: "b3"))
 board.move(from: Position(square: "e8"), to: Position(square: "b3"))
 
+board.move(from: Position(square: "c1"), to: Position(square: "e4"))
+
 board.displayBoard()
 
 //board.switchPlayer()
 
 print(board.judgeGameState())
 
+board.printPossiblePlayerMoves()
+
+print("")
+print("")
+
+board.switchPlayer()
 board.printPossiblePlayerMoves()
 
 //var dict = board.findPossibleMoves()
