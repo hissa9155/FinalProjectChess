@@ -63,18 +63,18 @@ class Board {
     let b1 = Bishop(isWhite: false, position: Position(square: "f8"))
     let r0 = Rook(isWhite: false, position: Position(square: "a8"))
     let r1 = Rook(isWhite: false, position: Position(square: "h8"))
-    //let q = Queen(isWhite: false, position: Position(square: "e8"))
+    let q = Queen(isWhite: false, position: Position(square: "e8"))
     let g = King(isWhite: false, position: Position(square: "d8"))
     
-    let q = Queen(isWhite: false, position: Position(square: "e5"))
+//    let q = Queen(isWhite: false, position: Position(square: "e5"))
     self.playBoard = [[R0, K0, B0, G, Q, B1, K1, R1],
                       [P0, P1, P2, P3, P4, P5, P6, P7],
                       [nil, nil, nil, nil, nil, nil, nil, nil],
                       [nil, nil, nil, nil, nil, nil, nil, nil],
-                      [nil, nil, nil, nil, q, nil, nil, nil],
+                      [nil, nil, nil, nil, nil, nil, nil, nil],
                       [nil, nil, nil, nil, nil, nil, nil, nil],
                       [p0, p1, p2, p3, p4, p5, p6, p7],
-                      [r0, k0, b0, g, nil, b1, k1, r1]]
+                      [r0, k0, b0, g, q, b1, k1, r1]]
   }
   
   // show the board like
@@ -305,7 +305,7 @@ class Board {
   func printAllPossibleMoves() {
     for (k, v) in board.findPossibleMoves() {
       print(k.getSquareString(), board.playBoard[k.row][k.column]?.symbol ?? "@", terminator: ": ")
-      v.map({ print(ColString.convertColNumToColString(colNum: $0.column)! + $0.convertRowNumToRowString(rowNum: $0.column), terminator: " ") })
+      v.map({ print(ColString.convertColNumToColString(colNum: $0.column)! + $0.convertRowNumToRowString(rowNum: $0.row), terminator: " ") })
       print()
     }
   }
