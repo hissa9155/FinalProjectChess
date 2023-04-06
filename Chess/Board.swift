@@ -376,17 +376,21 @@ class Board {
     // get foeKingPossibleMoves
     if foeKing != nil {
       foeKingPossibleMoves = findPossibleMoves(tgt: foeKing!)
-      print(foeKingPossibleMoves)
+//      print(foeKingPossibleMoves)
     }
     
     // compare foeKingPossibleMoves and PossiblePlayerMoves - return .check if there is intersection
     print("foeKingPossibleMoves", foeKingPossibleMoves)
     for (_, v) in PossiblePlayerMoves {
-      for possiblePlayerMove in v {
-        if foeKingPossibleMoves.contains(possiblePlayerMove) {
-          return .check
-        }
+//      for possiblePlayerMove in v {
+//        if foeKingPossibleMoves.contains(possiblePlayerMove) {
+//          return .check
+//        }
+//      }
+      if v.contains(foeKing!.position) {
+        return .check
       }
+
     }
     
     return .ongoing
