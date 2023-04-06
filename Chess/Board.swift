@@ -302,6 +302,14 @@ class Board {
     return possibleMoves
   }
   
+  func printAllPossibleMoves() {
+    for (k, v) in board.findPossibleMoves() {
+      print(k.getSquareString(), board.playBoard[k.row][k.column]?.symbol ?? "@", terminator: ": ")
+      v.map({ print(ColString.convertColNumToColString(colNum: $0.column)! + $0.convertRowNumToRowString(rowNum: $0.column), terminator: " ") })
+      print()
+    }
+  }
+  
   /// move a piece
   func move(piece:Piece, to:Position){
     
