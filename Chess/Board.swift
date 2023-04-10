@@ -193,11 +193,11 @@ class Board {
             continue
           }
           if friendExistsOnPosition(position: Position(row: row, column: colNum), isWhite: tgt.isWhite){
-            break
+            continue
           } else {
             possibleMoves.append(Position(row: row, column: colNum))
-            if pieceExistsOnPosition(position:Position(row: row, column: colNum)) {
-              break
+            if pieceExistsOnPosition(position: tgt.position) {
+              continue
             }
           }
         }
@@ -206,11 +206,11 @@ class Board {
             continue
           }
           if friendExistsOnPosition(position: Position(row: row, column: colNum), isWhite: tgt.isWhite){
-            break
+            continue
           } else {
             possibleMoves.append(Position(row: row, column: colNum))
-            if pieceExistsOnPosition(position: Position(row: row, column: colNum)) {
-              break
+            if pieceExistsOnPosition(position: tgt.position) {
+              continue
             }
           }
         }
@@ -222,29 +222,27 @@ class Board {
         var rowNum = row + 1
         var rightColNum = col
         var leftColNum = col
-        var isRightColEnd = false
-        var isLestColEnd = false
         while rowNum <= Board.MAX_ROW_NUM {
           rightColNum += 1
           leftColNum -= 1
           
-          if rightColNum <= Board.MAX_COL_NUM && !isRightColEnd {
-            if friendExistsOnPosition(position: Position(row: rowNum, column: rightColNum), isWhite:tgt.isWhite){
-              isRightColEnd = true
+          if rightColNum <= Board.MAX_COL_NUM {
+            if friendExistsOnPosition(position: Position(row: rowNum, column: col), isWhite:tgt.isWhite){
+              break
             } else {
               possibleMoves.append(Position(row: rowNum, column: rightColNum))
-              if pieceExistsOnPosition(position: Position(row: rowNum, column: rightColNum)) {
-                isRightColEnd = true
+              if pieceExistsOnPosition(position: Position(row: rowNum, column: col)) {
+                break
               }
             }
           }
-          if leftColNum >= Board.MIN_COL_NUM && !isLestColEnd {
-            if friendExistsOnPosition(position: Position(row: rowNum, column: leftColNum), isWhite: tgt.isWhite){
-              isLestColEnd = true
+          if leftColNum >= Board.MIN_COL_NUM {
+            if friendExistsOnPosition(position: Position(row: rowNum, column: col), isWhite: tgt.isWhite){
+              break
             } else {
               possibleMoves.append(Position(row: rowNum, column: leftColNum))
-              if pieceExistsOnPosition(position: Position(row: rowNum, column: leftColNum)) {
-                isLestColEnd = true
+              if pieceExistsOnPosition(position: Position(row: rowNum, column: col)) {
+                break
               }
             }
           }
@@ -253,29 +251,27 @@ class Board {
         rowNum = row - 1
         rightColNum = col
         leftColNum = col
-        isRightColEnd = false
-        isLestColEnd = false
         while rowNum >= Board.MIN_ROW_NUM {
           rightColNum += 1
           leftColNum -= 1
           
-          if rightColNum <= Board.MAX_COL_NUM && !isRightColEnd {
-            if friendExistsOnPosition(position: Position(row: rowNum, column: rightColNum), isWhite: tgt.isWhite){
-              isRightColEnd = true
+          if rightColNum <= Board.MAX_COL_NUM {
+            if friendExistsOnPosition(position: Position(row: rowNum, column: col), isWhite: tgt.isWhite){
+              break
             } else {
               possibleMoves.append(Position(row: rowNum, column: rightColNum))
-              if pieceExistsOnPosition(position: Position(row: rowNum, column: rightColNum)) {
-                isRightColEnd = true
+              if pieceExistsOnPosition(position: Position(row: rowNum, column: col)) {
+                break
               }
             }
           }
-          if leftColNum >= Board.MIN_COL_NUM && !isLestColEnd {
-            if friendExistsOnPosition(position: Position(row: rowNum, column: leftColNum), isWhite: tgt.isWhite){
-              isLestColEnd = true
+          if leftColNum >= Board.MIN_COL_NUM {
+            if friendExistsOnPosition(position: Position(row: rowNum, column: col), isWhite: tgt.isWhite){
+              break
             } else {
               possibleMoves.append(Position(row: rowNum, column: leftColNum))
-              if pieceExistsOnPosition(position: Position(row: rowNum, column: leftColNum)) {
-                isLestColEnd = true
+              if pieceExistsOnPosition(position: Position(row: rowNum, column: col)) {
+                break
               }
             }
           }
@@ -327,16 +323,16 @@ class Board {
   }
   
   func printAllPossibleMoves() {
-    for (k, v) in board.findPossibleMoves() {
-      print(k.getSquareString(), board.playBoard[k.row][k.column]?.symbol ?? "@", terminator: ": ")
+    for (k, v) in self.findPossibleMoves() {
+      print(k.getSquareString(), self.playBoard[k.row][k.column]?.symbol ?? "@", terminator: ": ")
       v.map({ print(ColString.convertColNumToColString(colNum: $0.column)! + $0.convertRowNumToRowString(rowNum: $0.row), terminator: " ") })
       print()
     }
   }
   
   func printPossiblePlayerMoves() {
-    for (k, v) in board.findPossiblePlayerMoves() {
-      print(k.getSquareString(), board.playBoard[k.row][k.column]?.symbol ?? "@", terminator: ": ")
+    for (k, v) in self.findPossiblePlayerMoves() {
+      print(k.getSquareString(), self.playBoard[k.row][k.column]?.symbol ?? "@", terminator: ": ")
       v.map({ print(ColString.convertColNumToColString(colNum: $0.column)! + $0.convertRowNumToRowString(rowNum: $0.row), terminator: " ") })
       print()
     }
@@ -384,7 +380,7 @@ class Board {
     }
     
     // compare foeKingPossibleMoves and PossiblePlayerMoves - return .check if there is intersection
-    print("foeKingPossibleMoves", foeKingPossibleMoves)
+//    print("foeKingPossibleMoves", foeKingPossibleMoves)
     for (_, v) in PossiblePlayerMoves {
 //      for possiblePlayerMove in v {
 //        if foeKingPossibleMoves.contains(possiblePlayerMove) {
