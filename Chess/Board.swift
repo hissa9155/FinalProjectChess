@@ -338,6 +338,17 @@ class Board {
     }
   }
   
+  func printPossiblePieceMoves(_ square: String) {
+//    print(findPossiblePlayerMoves())
+    let possiblePlayerMoves = findPossiblePlayerMoves()
+    let piecePosition = Position(square: square)
+    let possiblePieceMoves = possiblePlayerMoves[piecePosition]!
+//    print(possiblePieceMoves!)
+    print(square, self.playBoard[piecePosition.row][piecePosition.column]?.symbol ?? "@", terminator: ": ")
+    possiblePieceMoves.map({ print(ColString.convertColNumToColString(colNum: $0.column)! + $0.convertRowNumToRowString(rowNum: $0.row), terminator: " ") })
+    print()
+  }
+  
   /// move a piece
   func move(from:Position, to:Position) {
     let (from_row, from_col) = (from.row, from.column)

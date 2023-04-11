@@ -28,14 +28,17 @@ class Game {
       } else if input == "board" {
         board.displayBoard()
         continue
+      } else if input == "moves" {
+        board.printPossiblePlayerMoves()
+        continue
       } else if input == "resign" {
         board.switchPlayer()
         print("Game over - \(currentPlayer) won by resignation")
         break
       } else if validateMove(input!) {
         move(input!)
-      } else if validateShowPossibleMoves(input!) {
-        board.printPossiblePlayerMoves()
+      } else if validateInputSquareString(input!) {
+        board.printPossiblePieceMoves(input!)
         continue
       }
       counter += 1
@@ -87,7 +90,7 @@ class Game {
     return false
   }
   
-  private func validateShowPossibleMoves(_ input: String) -> Bool {
+  private func validateInputSquareString(_ input: String) -> Bool {
     guard input.count == 2 else { return false }
     if let rowIndex1 = Int(input[input.index(input.startIndex, offsetBy: 1)..<input.index(input.startIndex, offsetBy: 2)]) {
       return true
